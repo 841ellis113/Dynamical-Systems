@@ -1,4 +1,4 @@
-import numpy as numpy
+import numpy 
 import matplotlib.pyplot as plt
 import random 
 import seaborn as sns
@@ -113,3 +113,4 @@ def compare_poincare_plot(m,t,r1,r2,r3,r4,r5,r6,x0,iterations,transients):
 
 
             
+
