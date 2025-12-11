@@ -11,9 +11,7 @@ def logistic(r,x):
 calculate the values of the logistical map with an initial x0 and parameter r, only capturing dat
 after removing the transients, we also add a small value to
 the value of x0 as to remove synchronis artifacts as well as taking a random sample before
-plotting. We calculate the exponent using the definition of (1/n)(sum(ln(|f'|)). The input
-values would be parameter value r, initial x value x0, the number of iterations and the
-number of iterations to allow before recording data (transients) k or (r,x,i,t)
+plotting. 
 '''
 def logistic_map_values(r,x0,iterations,transients):
     x = x0 + random.uniform(0,1)*1e-5
@@ -25,11 +23,11 @@ def logistic_map_values(r,x0,iterations,transients):
     return x_values
             
 '''
-We can produce a matrix formed from the vectors the consist of steps from within the time
+We can produce a matrix formed from vectors that consist of iteration steps from within the time
 series. The number of different column vectors is the embedding dimension and the number
 of iterations taken before capturing data points into the column vector is known as the
 time delay, i.e. if m = 2 and t=3 means we construct a matrix with 2 vectors and each
-point within the vectors is steps from the previous
+point within the vectors is 3 steps from the previous
 '''
 def embedded_matrix(m,t,r,x0,iterations,transients):
     x_data = logistic_map_values(r,x0,iterations,transients)
@@ -40,9 +38,9 @@ def embedded_matrix(m,t,r,x0,iterations,transients):
         matrix[:,i] = column
     return matrix
 '''
-to begin with we plot the simple time series against iteration step and the 2d poincare plot
-or return map. The time series graph simply returns the 'trajectory' taken by the map and
-after iterating for N step returns the final 50 or so steps as not to overcrowed the graph.
+to begin with, we plot the simple time series against iteration step. The time series
+graph simply returns the 'trajectory' taken by the map and after iterating for N step
+returns the final 50 or so steps as not to overcrowed the graph.
 '''
 def time_series_map(r,x0,iterations,transients):
     data    = logistic_map_values(r,x0,iterations,transients)
@@ -86,7 +84,7 @@ def two_D_Poincare_plot(t,r,x0,iterations,transients):
     plt.ylabel(rf'$X_{{n+{t}}}$')
     plt.title('Return Map of the Logistic Map')
     plt.show()
-    return matrix
+    #return matrix
 
 def compare_poincare_plot(m,t,r1,r2,r3,r4,r5,r6,x0,iterations,transients):
     fig, axes  = plt.subplots(2,3)
@@ -103,6 +101,21 @@ def compare_poincare_plot(m,t,r1,r2,r3,r4,r5,r6,x0,iterations,transients):
     plt.suptitle('Poincare plots of the Logistic Map at Different r Values')
     plt.show()
 
+'''
+a function that takes an embedded matrix and plots the return map for x, x+1t, x+2t... so
+that it can be seen how many steps it takes for the breakdon of accurate predicatability.
+'''
+
+def multiple_time_delay(m,t,r,x0,iterations,transients):
+    matrix = embedded_matrix(m,t,r,x0,iterations,transients)
+    fig,ax = plt.subplots(1,m-1)
+    for i in range(m-1):
+        ax[i].scatter(matrix[:,0],matrix[:,i+1],s=2,color='black')
+        ax[i].set_title(rf'$X_{{n+{i+1}}}$')
+    fig.suptitle('Return Map (time delayed)')
+    fig.supylabel('$X_{{{n+i}}}$')
+    fig.supxlabel('$X_n$')
+    plt.show()
 
 
 
@@ -113,4 +126,3 @@ def compare_poincare_plot(m,t,r1,r2,r3,r4,r5,r6,x0,iterations,transients):
 
 
             
-
