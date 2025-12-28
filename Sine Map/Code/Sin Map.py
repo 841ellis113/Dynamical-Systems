@@ -93,10 +93,10 @@ Create a bifurcation diagram for the Sine map
 '''
 
 def sine_bifurcation(r1,r2,x,iterations,transients):
-    r_values = np.linspace(r1,r2,800)
+    r_values = np.linspace(r1,r2,1200)
     for r in r_values:       
         data = Sin_embedded_matrix(r,x,iterations,transients)
-        plt.scatter(data['r'],data['X_n'],s=0.6,color='black',alpha=0.1)
+        plt.scatter(data['r'],data['X_n'],s=0.6,color='black',alpha=0.05)
     plt.title('Sine Map Bifurcation')
     plt.xlabel('Parameter (r)')
     plt.xlim(0,1)
@@ -163,12 +163,13 @@ def sine_invariant_density(r,x,iterations,transients,bins):
     x_axis    = (numbers + 0.5) * width
     x_range   = np.linspace(0,1,bins)
     y_range   = [sine_invariant(x) for x in x_range]
-    plt.scatter(x_axis,density,s=1,color='black',label='Numerical',alpha=0.6)
+    plt.scatter(x_axis,density,s=1,color='black',label='Numerical',alpha=0.6
+                )
     plt.xlabel('Bins centres')
     plt.ylabel('Density')
     plt.title(f'Invariant Measure for r = {r}')
     plt.xlim(0,1)
     plt.ylim(0,15)
-    plt.scatter(x_range,y_range,s=0.5,color='red',label='Analytical')
+    plt.plot(x_range,y_range,linewidth=1,color='red',label='Analytical')
     plt.legend()
     plt.show()
