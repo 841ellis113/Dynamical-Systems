@@ -145,3 +145,30 @@ def return_maps(r,x,iterations,transients,tau=1,remove=True):
         fig.supylabel('$X_{n+t}$')
         fig.supxlabel('$X_n$')
         plt.show()
+
+'''
+Calculating the Invariant density of the sine map
+'''
+
+def sine_invariant(x):
+    Pi = np.pi
+    return 1/(Pi*np.sqrt(x*(1-x)))
+
+def sine_invariant_density(r,x,iterations,transients,bins):
+    width = 1/bins
+    data      = Sin_embedded_matrix(r,x,iterations,transients)['X_n']
+    x_number  = np.floor(np.array(data,float)*bins)
+    numbers, totals    = np.unique(x_number, return_counts=True)
+    density   = totals/(np.sum(totals)*width)
+    x_axis    = (numbers + 0.5) * width
+    x_range   = np.linspace(0,1,bins)
+    y_range   = [sine_invariant(x) for x in x_range]
+    plt.scatter(x_axis,density,s=1,color='black',label='Numerical',alpha=0.6)
+    plt.xlabel('Bins centres')
+    plt.ylabel('Density')
+    plt.title(f'Invariant Measure for r = {r}')
+    plt.xlim(0,1)
+    plt.ylim(0,15)
+    plt.scatter(x_range,y_range,s=0.5,color='red',label='Analytical')
+    plt.legend()
+    plt.show()
