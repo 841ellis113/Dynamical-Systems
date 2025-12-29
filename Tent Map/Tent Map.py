@@ -170,7 +170,38 @@ def Tent_Inv_density(r,x,iterations,transients,bins):
     plt.legend()
     plt.show()
     
+'''
+Calculate the shannon entropy
+'''
 
+def tent_shannon_entropy(r,x,iterations,transients,bins,base='e'):
+    data            = Tent_values(r,x,iterations,transients)['X_n']
+    values          = np.array(data*bins)
+    floor           = np.floor(values)
+    numbers, counts = np.unique(floor, return_counts=True)
+    prob            = counts/sum(counts)
+    clean_prob      = prob[prob>0]
+    if base == 'e':
+        entropy_i   = clean_prob*np.log(clean_prob)
+        entropy     = -sum(entropy_i)
+    elif base == 2:
+        entropy_i   = clean_prob*np.log2(clean_prob)
+        entropy     = -sum(entropy_i)
+    return entropy
 
+def tent_shannon_entropy_range(r1,r2,x,iterations,transients,bins,base='e'):
+    r_values = np.linspace(r1,r2,1000)
+    entropy  = []
+    for r in r_values:
+        entropy.append(tent_shannon_entropy(r,x,iterations,transients,bins,base))
+    plt.scatter(r_values,entropy,marker='.',s=2,color='black')
+    plt.grid(True, which='both',linestyle='--',color='grey',linewidth=0.5)
+    plt.xlim(r1,r2)
+    plt.xlabel('Parameter (r)')
+    plt.ylabel('Shannon Entropy')
+    plt.title(f'Shannon Entropy for Tent Map with Bins = {bins}')
+    plt.show()
+        
+        
 
             
